@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <template id="snippet_options_inherit" name="template_name" inherit_id="website.snippet_options">
+            <xpath expr="//div[@data-js='HeaderLayout']//we-select" position="inside">
+                <we-button title="Header 1"
+                        data-name="header_header_1_opt"
+                        data-trigger="regular_header_visibility_opt"
+                        data-customize-website-views="theme_gatheraround.template_ga_header_1"
+                        data-customize-website-variable="'header_1'"
+                        data-img="/website/static/src/img/snippets_options/header_template_default.svg"/>
+                <we-button title="Header 2"
+                        data-name="header_header_2_opt"
+                        data-trigger="regular_header_visibility_opt"
+                        data-customize-website-views="theme_gatheraround.template_ga_header_2"
+                        data-customize-website-variable="'header_2'"
+                        data-img="/website/static/src/img/snippets_options/header_template_default.svg"/>
+                <we-button title="Header 3"
+                        data-name="header_header_3_opt"
+                        data-trigger="regular_header_visibility_opt"
+                        data-customize-website-views="theme_gatheraround.template_ga_header_3"
+                        data-customize-website-variable="'header_3'"
+                        data-img="/website/static/src/img/snippets_options/header_template_default.svg"/>
+                <we-button title="Header 4"
+                        data-name="header_header_4_opt"
+                        data-trigger="regular_header_visibility_opt"
+                        data-customize-website-views="theme_gatheraround.template_ga_header_4"
+                        data-customize-website-variable="'header_4'"
+                        data-img="/website/static/src/img/snippets_options/header_template_default.svg"/>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

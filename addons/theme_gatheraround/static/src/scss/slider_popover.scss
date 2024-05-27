@@ -1,0 +1,64 @@
+#right_slider_popover {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    // width: 25%;
+    min-width: 380px;
+    max-width: 90vw;
+    z-index: 11100;
+    transform: translateX(100%);
+    transition: transform 0.5s ease-in-out;
+    background: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0);
+    scroll-behavior: smooth;
+
+    &.slide_left {
+        transform: translateX(0%);
+    }
+
+    .dynamic_slider_content {
+        .slider_body {
+            overflow-y: auto !important;
+            height: 75vh;
+
+            .product_card {
+                background: rgba(66, 76, 76, 0.3);
+            }
+
+            .setting_card {
+                background: rgba(66, 76, 76, 0.3);
+
+                h5 {
+                    background: $secondary;
+                }
+
+                a {
+                    text-decoration: none;
+                    color: #111;
+                }
+
+                a.active {
+                    background: $primary;
+                    color: #fff;
+                }
+            }
+
+            .user_card {
+                background: rgba(66, 76, 76, 0.3);
+
+                .user_info {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            &::-webkit-scrollbar {
+                width: 0.5rem;
+                height: 0.5rem;
+            }
+        }
+
+    }
+}

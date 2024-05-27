@@ -1,0 +1,441 @@
+// Header 1
+.gatheraround_header_1 {
+    .top_div {
+        .icons {
+            li {
+                a.ga-h-icons {
+                    background: $gray-200;
+
+                    &:hover {
+                        background: $primary !important;
+
+                        i.fa {
+                            color: #fff !important;
+                        }
+                    }
+
+                    &::after {
+                        display: none;
+                    }
+                }
+
+                .dropdown-menu {
+
+                    .header_lang_dropdown,
+                    .header_pricelist_dropdown {
+
+                        .heading {
+                            background: $gray-200;
+                            color: #fff;
+                        }
+
+                        .header_lang_selector,
+                        .header_pricelist_selector {
+                            a {
+                                text-decoration: none;
+                                color: #111;
+                            }
+
+                            a.active {
+                                background: $primary;
+                                color: #fff;
+                            }
+                        }
+                    }
+
+                    &::-webkit-scrollbar {
+                        width: 0.5rem;
+                        height: 0.5rem;
+                    }
+                }
+
+            }
+        }
+
+        .o_searchbar_form {
+            .search_bar {
+                background-color: $gray-200 !important;
+
+                input.oe_search_box {
+                    border-top-left-radius: 2rem;
+                    border-bottom-left-radius: 2rem;
+                    box-shadow: none !important;
+                    background-color: $gray-200 !important;
+                }
+
+                button.oe_search_button {
+                    background: $primary;
+                    padding: 0 !important;
+                    box-shadow: none !important;
+                    aspect-ratio: 1;
+                }
+            }
+        }
+    }
+
+    .bottom_div {
+        background: $primary;
+
+        .nav-item {
+            position: relative;
+
+            .nav-link {
+                color: #fff;
+                letter-spacing: 0.1rem;
+            }
+
+            .nav-link.active {
+                color: $secondary;
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                background: $secondary;
+                height: 3px;
+                bottom: 0;
+                transition: 5s ease-in-out;
+            }
+
+            &:hover::after {
+                width: 100%;
+            }
+        }
+    }
+}
+
+// Header 2
+.gatheraround_header_2 {
+    .left_div {
+        .navbar-brand.logo {
+            img {
+                height: 8rem;
+            }
+        }
+    }
+
+    .right_div {
+        .top_div {
+            .icons {
+                li {
+                    a.ga-h-icons {
+                        background: $gray-200;
+
+                        &:hover {
+                            background: $primary !important;
+
+                            i.fa {
+                                color: #fff !important;
+                            }
+
+                            sup {
+                                background: $secondary !important;
+                            }
+                        }
+
+                        &::after {
+                            display: none;
+                        }
+                    }
+
+                    .dropdown-menu {
+
+                        .header_lang_dropdown,
+                        .header_pricelist_dropdown {
+
+                            .heading {
+                                background: $gray-200;
+                                color: #fff;
+                            }
+
+                            .header_lang_selector,
+                            .header_pricelist_selector {
+                                a {
+                                    text-decoration: none;
+                                    color: #111;
+                                }
+
+                                a.active {
+                                    background: $primary;
+                                    color: #fff;
+                                }
+                            }
+                        }
+
+                        &::-webkit-scrollbar {
+                            width: 0.5rem;
+                            height: 0.5rem;
+                        }
+                    }
+
+                }
+            }
+
+            .o_searchbar_form {
+                .search_bar {
+                    background-color: $gray-200 !important;
+
+                    input.oe_search_box {
+                        border-top-left-radius: 2rem;
+                        border-bottom-left-radius: 2rem;
+                        box-shadow: none !important;
+                        background-color: $gray-200 !important;
+                    }
+
+                    button.oe_search_button {
+                        background: $primary;
+                        padding: 0 !important;
+                        box-shadow: none !important;
+                        aspect-ratio: 1;
+                    }
+                }
+            }
+        }
+
+        .bottom_div {
+
+            .nav-item {
+                position: relative;
+
+                .nav-link {
+                    color: $gray-900;
+                    letter-spacing: 0.05rem;
+                }
+
+                .nav-link.active {
+                    color: $primary;
+                    transform: scale(1.2);
+                }
+
+                &:hover {
+                    transform: scale(1.2);
+                }
+
+            }
+        }
+    }
+}
+
+// Header 3
+.gatheraround_header_3 {
+    .top_div {
+        .icons {
+            li {
+                a.ga-h-icons {
+                    background: $gray-200;
+
+                    &:hover {
+                        background: $primary !important;
+
+                        i.fa {
+                            color: #fff !important;
+                        }
+
+                        sup {
+                            background: $secondary !important;
+                        }
+                    }
+
+                    &::after {
+                        display: none;
+                    }
+                }
+
+                .dropdown-menu {
+                    top: 0.5rem !important;
+                    width: 15rem;
+
+                    .header_lang_dropdown,
+                    .header_pricelist_dropdown {
+
+                        .heading {
+                            background: $gray-200;
+                            color: #fff;
+                        }
+
+                        .header_lang_selector,
+                        .header_pricelist_selector {
+                            a {
+                                text-decoration: none;
+                                color: #111;
+                            }
+
+                            a.active {
+                                background: $primary;
+                                color: #fff;
+                            }
+                        }
+                    }
+
+                    &::-webkit-scrollbar {
+                        width: 0.5rem;
+                        height: 0.5rem;
+                    }
+                }
+
+            }
+        }
+    }
+
+    .bottom_div {
+        background: $primary;
+
+        .nav-item {
+            position: relative;
+
+            .nav-link {
+                color: #fff;
+                letter-spacing: 0.1rem;
+            }
+
+            .nav-link.active {
+                background: $secondary;
+            }
+
+            &:hover {
+                background: $secondary;
+            }
+
+        }
+
+        .o_searchbar_form {
+            .search_bar {
+                background-color: $gray-200 !important;
+
+                input.oe_search_box {
+                    border-top-left-radius: 2rem;
+                    border-bottom-left-radius: 2rem;
+                    box-shadow: none !important;
+                    background-color: $gray-200 !important;
+                }
+
+                button.oe_search_button {
+                    background: $primary;
+                    padding: 0 !important;
+                    box-shadow: none !important;
+                    aspect-ratio: 1;
+                }
+            }
+        }
+    }
+}
+
+// Header 4
+.o_header_standard:has(.gatheraround_header_4) {
+    transform: none !important;
+}
+
+.gatheraround_header_4 {
+    .menus {
+        .nav-item {
+            position: relative;
+
+            .nav-link {
+                color: $gray-700;
+                letter-spacing: 0.1rem;
+            }
+
+            .nav-link.active {
+                color: $primary;
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                background: $secondary;
+                height: 3px;
+                bottom: 0;
+                transition: 5s ease-in-out;
+            }
+
+            &:hover::after {
+                width: 100%;
+            }
+        }
+    }
+
+    .o_searchbar_form {
+        .search_bar {
+            background-color: $gray-200 !important;
+
+            input.oe_search_box {
+                border-top-left-radius: 2rem;
+                border-bottom-left-radius: 2rem;
+                box-shadow: none !important;
+                background-color: $gray-200 !important;
+            }
+
+            button.oe_search_button {
+                background: $primary;
+                padding: 0 !important;
+                box-shadow: none !important;
+                aspect-ratio: 1;
+            }
+        }
+    }    
+    
+    .icons {
+        top: 50%;
+        right: 0;
+        transition: transform 0.5s ease-in-out;
+        transform: translateY(-50%);
+        z-index: 9;
+
+        li {
+            a.ga-h-icons {
+                background: $gray-200;
+
+                &:hover {
+                    background: $primary !important;
+
+                    i.fa {
+                        color: #fff !important;
+                    }
+
+                    sup {
+                        background: $secondary !important;
+                    }
+                }
+
+                &::after {
+                    display: none;
+                }
+            }
+
+            .dropdown-menu {
+
+                .header_lang_dropdown,
+                .header_pricelist_dropdown {
+
+                    .heading {
+                        background: $gray-200;
+                        color: #fff;
+                    }
+
+                    .header_lang_selector,
+                    .header_pricelist_selector {
+                        a {
+                            text-decoration: none;
+                            color: #111;
+                        }
+
+                        a.active {
+                            background: $primary;
+                            color: #fff;
+                        }
+                    }
+                }
+
+                &::-webkit-scrollbar {
+                    width: 0.5rem;
+                    height: 0.5rem;
+                }
+            }
+
+        }
+
+        &.slide_left {
+            transform: translate(-380px, -50%);
+        }
+    }
+}

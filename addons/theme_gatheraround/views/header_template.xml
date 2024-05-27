@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <template id="header_language_selector" name="Gather Around Header Langusge">
+            <t t-set="active_lang" t-value="list(filter(lambda lg : lg[0] == lang, languages))[0]"/>
+            <t t-set="language_selector_visible" t-value="len(languages) &gt; 1 or _selector_visible"/>
+            <div t-attf-class="js_language_selector header_lang_dropdown #{_div_class}" t-if="language_selector_visible">
+                <a t-attf-class="#{_link_class}">
+                    <span t-if="not no_text" class="align-middle" >Select Language</span>
+                </a>
+                <div class="header_lang_selector d-flex flex-column mt-2 gap-1">
+                    <t t-foreach="languages" t-as="lg">
+                        <a t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang_code=lg[0])" t-attf-class="js_change_lang px-2 #{'active' if active_lang[0] == lg[0] else ''}" t-att-data-url_code="lg[1]">
+                            <span t-if="not no_text" t-esc="lg[2].split('/').pop()"/>
+                        </a>
+                    </t>
+                </div>
+            </div>
+        </template>
+
+        <template id="header_pricelist_selector" name="Gather Around Header pricelist">
+            <t t-nocache="" t-nocache-_div_class="_div_class" t-nocache-_link_class="_link_class" t-nocache-_simple_text="_simple_text" >
+                <t t-set="website_sale_pricelists" t-value="website.get_pricelist_available(show_visible=True)"/>
+                <div t-if="website_sale_pricelists and len(website_sale_pricelists)&gt;1" t-attf-class="header_pricelist_dropdown #{_div_class}">
+                    <span t-if="_show_label" class="d-none d-lg-inline">Currency:</span>
+                    <t t-set="curr_pl" t-value="website._get_current_pricelist()"/>
+                    <a t-attf-class="#{_link_class}" data-bs-toggle="dropdown">
+                        <span t-if="_simple_text">Select Pricelist</span>
+                        <t t-else="" t-esc="curr_pl and curr_pl.name or ' - '"/>
+                    </a>
+                    <div class="header_pricelist_selector d-flex flex-column mt-2 gap-1">
+                        <t t-foreach="website_sale_pricelists" t-as="pl">
+                            <a t-att-href="'/shop/change_pricelist/%s' % pl.id" t-attf-class="px-2 #{'active' if pl == curr_pl else ''}">
+                                <span class="switcher_pricelist" t-att-data-pl_id="pl.id" t-esc="pl.name"/>
+                            </a>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="header_setting_link" name="Header Setting Dropdown">
+            <li t-attf-class="#{_item_class}">
+                <a href="#" role="button" data-bs-toggle="dropdown" t-attf-class="dropdown-toggle btn #{_link_class}">
+                    <div t-if="_icon" t-attf-class="#{_icon_wrap_class}">
+                        <i t-attf-class="fa fa-1x fa-fw fa-gear #{_icon_class}"/>
+                    </div>
+                </a>
+                <div t-attf-class="dropdown-menu js_usermenu #{_dropdown_menu_class}" role="menu">
+                    <t t-call="theme_gatheraround.header_language_selector">
+                        <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded-0 p-2 text-reset heading"/>
+                    </t>
+                    <div t-if="len(languages) &gt; 1 or _selector_visible" id="o_public_divider" class="dropdown-divider"/>
+                    <t t-call="theme_gatheraround.header_pricelist_selector">
+                        <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded-0 p-2 text-reset heading"/>
+                        <t t-set="_simple_text" t-valuef="True"/>
+                    </t>                    
+                </div>
+            </li>            
+        </template>
+
+        <template id="user_dropdown_sign_in_register" name="Add SignIn and Register" inherit_id="portal.user_dropdown">
+            <xpath expr="//li" position="after">
+                <li t-if="not is_connected" t-attf-class="#{_item_class} o_no_autohide_item">
+                    <a href="#" role="button" data-bs-toggle="dropdown" t-attf-class="#{'' if _no_caret else 'dropdown-toggle'} btn #{_link_class}">
+                        <div t-if="_icon" t-attf-class="#{_icon_wrap_class}">
+                            <i t-attf-class="fa fa-1x fa-fw fa-user #{_icon_class}"/>
+                        </div>
+                        <span t-if="_user_name" t-attf-class="#{_user_name_class}"> Guest</span>
+                    </a>
+                    <div t-attf-class="dropdown-menu js_usermenu #{_dropdown_menu_class}" role="menu">
+                        <a t-attf-href="/web/login" role="menuitem" id="o_logout" class="dropdown-item ps-3">
+                            <i class="fa fa-fw fa-sign-in me-1 small text-primary"/> Login
+                        </a>                        
+                        <div id="o_public_divider" class="dropdown-divider"/>
+                        <a t-attf-href="/web/signup" role="menuitem" id="o_logout" class="dropdown-item ps-3">
+                            <i class="fa fa-fw fa-registered me-1 small text-primary"/> Register
+                        </a>            
+                    </div>
+                </li>                
+            </xpath>
+        </template>
+
+        <!-- header 1 -->
+        <template id="template_ga_header_1" inherit_id="website.layout" name="Template Gather Around Header 1" active="False">
+            <xpath expr="//header//nav" position="replace">
+                <t t-call="website.navbar">
+                    <t t-set="_navbar_classes" t-valuef="d-none d-lg-block py-0 shadow-sm p-0"/>
+
+                    <div class="d-flex flex-column gatheraround_header_1">
+                        <div class="top_div d-flex justify-content-around w-100 py-4">
+                            <!-- Icons -->
+                            <div class="icons d-flex gap-3">
+                                <!-- Wishlist Icon -->
+                                <t t-call="website_sale_wishlist.header_wishlist_link">
+                                    <t t-set="_icon" t-value="True"/>
+                                    <t t-set="_link_class" t-value="'btn position-relative rounded-circle p-2 text-center text-reset ga-h-icons'"/>
+                                    <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+                                    <t t-set="_item_class" t-valuef="list-unstyled"/>
+                                    <t t-set="_icon_wrap_class" t-valuef="fs-5 text-muted"/>
+                                </t>                                
+                                <!-- Cart Icon -->
+                                <t t-call="website_sale.header_cart_link">
+                                    <t t-set="_icon" t-value="True"/>
+                                    <t t-set="_link_class" t-value="'btn position-relative rounded-circle p-2 text-center text-reset ga-h-icons'"/>
+                                    <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+                                    <t t-set="_item_class" t-valuef="list-unstyled"/>
+                                    <t t-set="_icon_wrap_class" t-valuef="fs-5 text-muted"/>
+                                </t>
+                                <!-- User Dropdown Icon -->
+                                <t t-call="portal.user_dropdown">
+                                    <t t-set="_icon" t-value="true"/>
+                                    <t t-set="_item_class" t-valuef="dropdown list-unstyled"/>
+                                    <t t-set="_icon_class" t-valuef="fa-stack fs-5 text-muted"/>
+                                    <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded-circle p-2 text-reset ga-h-icons"/>
+                                    <t t-set="_dropdown_menu_class" t-valuef="dropdown-menu-start"/>
+                                </t>
+                                <!-- Setting Icon -->
+                                <t t-call="theme_gatheraround.header_setting_link">
+                                    <t t-set="_icon" t-value="true"/>
+                                    <t t-set="_item_class" t-valuef="dropdown list-unstyled"/>
+                                    <t t-set="_icon_class" t-valuef="fa-stack fs-5 text-muted"/>
+                                    <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded-circle p-2 text-reset ga-h-icons"/>
+                                    <t t-set="_dropdown_menu_class" t-valuef="dropdown-menu-start"/>
+                                </t>               
+                            </div>
+
+                            <!-- Brand -->
+                            <t t-call="website.placeholder_header_brand">
+                                <t t-set="_link_class" t-valuef="d-flex align-items-center me-4 p-2"/>
+                            </t>
+                            <!-- Search bar -->
+                            <t t-call="website.placeholder_header_search_box">
+                                <t t-set="_input_classes" t-valuef="me-1"/>
+                                <t t-set="_submit_classes" t-valuef="rounded-circle"/>
+                                <t t-set="_form_classes" t-valuef="h-100 z-index-0"/>
+                                <t t-set="_classes" t-valuef="h-100 o_border_contrast bg-light rounded-pill search_bar"/>
+                                <t t-set="_item_class" t-valuef="list-unstyled"/>
+                            </t>                            
+                        </div>
+                        <div class="bottom_div d-flex justify-content-center">
+                            <!-- Menu -->
+                            <t t-foreach="website.menu_id.child_id" t-as="submenu">
+                                <t t-call="website.submenu">
+                                    <t t-set="item_class" t-valuef="nav-item h-100 o_border_contrast list-unstyled text-uppercase fw-bold"/>
+                                    <t t-set="link_class" t-valuef="nav-link d-flex align-items-center h-100 py-3"/>
+                                </t>
+                            </t>                        
+                        </div>
+                    </div>
+                </t>
+                <t t-call="website.template_header_mobile"/>
+            </xpath>
+        </template>
+
+        <!-- header 2 -->
+        <template id="template_ga_header_2" inherit_id="website.layout" name="Template Gather Around Header 2" active="False">
+            <xpath expr="//header//nav" position="replace">
+                <t t-call="website.navbar">
+                    <t t-set="_navbar_classes" t-valuef="d-none d-lg-block py-0 shadow-sm p-0 pt-3"/>
+
+                    <div class="d-flex justify-content-around gatheraround_header_2">
+                        <div class="left_div my-auto">
+                            <!-- Brand -->
+                            <t t-call="website.placeholder_header_brand">
+                                <t t-set="_link_class" t-valuef="d-flex align-items-center me-4 p-2"/>
+                            </t>                        
+                        </div>
+                        <div class="right_div d-flex flex-column justify-content-between">
+                            <div class="top_div d-flex">
+                                <!-- Search bar -->
+                                <t t-call="website.placeholder_header_search_box">
+                                    <t t-set="_input_classes" t-valuef="me-1"/>
+                                    <t t-set="_submit_classes" t-valuef="rounded-end text-white"/>
+                                    <t t-set="_form_classes" t-valuef="h-100 z-index-0"/>
+                                    <t t-set="_classes" t-valuef="h-100 o_border_contrast bg-light rounded search_bar"/>
+                                    <t t-set="_item_class" t-valuef="list-unstyled me-5"/>
+                                </t>
+                                <!-- Icons -->
+                                <div class="icons d-flex gap-3">
+                                    <!-- Wishlist Icon -->
+                                    <t t-call="website_sale_wishlist.header_wishlist_link">
+                                        <t t-set="_icon" t-value="True"/>
+                                        <t t-set="_link_class" t-value="'btn position-relative rounded p-2 text-center text-reset ga-h-icons'"/>
+                                        <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+                                        <t t-set="_item_class" t-valuef="list-unstyled"/>
+                                        <t t-set="_icon_wrap_class" t-valuef="fs-5 text-muted"/>
+                                    </t>                                
+                                    <!-- Cart Icon -->
+                                    <t t-call="website_sale.header_cart_link">
+                                        <t t-set="_icon" t-value="True"/>
+                                        <t t-set="_link_class" t-value="'btn position-relative rounded p-2 text-center text-reset ga-h-icons'"/>
+                                        <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+                                        <t t-set="_item_class" t-valuef="list-unstyled"/>
+                                        <t t-set="_icon_wrap_class" t-valuef="fs-5 text-muted"/>
+                                    </t>
+                                    <!-- User Dropdown Icon -->
+                                    <t t-call="portal.user_dropdown">
+                                        <t t-set="_icon" t-value="true"/>
+                                        <t t-set="_item_class" t-valuef="dropdown list-unstyled"/>
+                                        <t t-set="_icon_class" t-valuef="fa-stack fs-5 text-muted"/>
+                                        <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded p-2 text-reset ga-h-icons"/>
+                                        <t t-set="_dropdown_menu_class" t-valuef="dropdown-menu-end"/>
+                                    </t>
+                                    <!-- Setting Icon -->
+                                    <t t-call="theme_gatheraround.header_setting_link">
+                                        <t t-set="_icon" t-value="true"/>
+                                        <t t-set="_item_class" t-valuef="dropdown list-unstyled"/>
+                                        <t t-set="_icon_class" t-valuef="fa-stack fs-5 text-muted"/>
+                                        <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded p-2 text-reset ga-h-icons"/>
+                                        <t t-set="_dropdown_menu_class" t-valuef="dropdown-menu-end"/>
+                                    </t>               
+                                </div>
+                            </div>
+                            <div class="bottom_div d-flex justify-content-end">
+                                <!-- Menu -->
+                                <t t-foreach="website.menu_id.child_id" t-as="submenu">
+                                    <t t-call="website.submenu">
+                                        <t t-set="item_class" t-valuef="nav-item h-100 o_border_contrast list-unstyled text-uppercase fw-bold"/>
+                                        <t t-set="link_class" t-valuef="nav-link d-flex align-items-center h-100 py-3"/>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+                <t t-call="website.template_header_mobile"/>
+            </xpath>            
+        </template>
+
+        <!-- header 3 -->
+        <template id="template_ga_header_3" inherit_id="website.layout" name="Template Gather Around Header 3" active="False">
+            <xpath expr="//header//nav" position="replace">
+                <t t-call="website.navbar">
+                    <t t-set="_navbar_classes" t-valuef="d-none d-lg-block py-0 shadow-sm p-0 pt-3"/>
+
+                    <div class="d-flex flex-column gatheraround_header_3">
+                        <div class="top_div d-flex justify-content-around mb-3">
+                            <!-- Brand -->
+                            <t t-call="website.placeholder_header_brand">
+                                <t t-set="_link_class" t-valuef="d-flex align-items-center me-4 p-2"/>
+                            </t>
+
+                            <!-- Icons -->
+                            <div class="icons d-flex gap-3">
+                                <!-- Wishlist Icon -->
+                                <t t-call="website_sale_wishlist.header_wishlist_link">
+                                    <t t-set="_icon" t-value="True"/>
+                                    <t t-set="_link_class" t-value="'btn position-relative rounded-0 p-2 text-center text-reset ga-h-icons'"/>
+                                    <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-0'"/>
+                                    <t t-set="_item_class" t-valuef="list-unstyled"/>
+                                    <t t-set="_icon_wrap_class" t-valuef="fs-5 text-muted"/>
+                                </t>                                
+                                <!-- Cart Icon -->
+                                <t t-call="website_sale.header_cart_link">
+                                    <t t-set="_icon" t-value="True"/>
+                                    <t t-set="_link_class" t-value="'btn position-relative rounded-0 p-2 text-center text-reset ga-h-icons'"/>
+                                    <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-0'"/>
+                                    <t t-set="_item_class" t-valuef="list-unstyled"/>
+                                    <t t-set="_icon_wrap_class" t-valuef="fs-5 text-muted"/>
+                                </t>
+                                <!-- User Dropdown Icon -->
+                                <t t-call="portal.user_dropdown">
+                                    <t t-set="_icon" t-value="true"/>
+                                    <t t-set="_item_class" t-valuef="dropdown list-unstyled"/>
+                                    <t t-set="_icon_class" t-valuef="fa-stack fs-5 text-muted"/>
+                                    <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded-0 p-2 text-reset ga-h-icons"/>
+                                    <t t-set="_dropdown_menu_class" t-valuef="dropdown-menu-end rounded-0"/>
+                                </t>
+                                <!-- Setting Icon -->
+                                <t t-call="theme_gatheraround.header_setting_link">
+                                    <t t-set="_icon" t-value="true"/>
+                                    <t t-set="_item_class" t-valuef="dropdown list-unstyled"/>
+                                    <t t-set="_icon_class" t-valuef="fa-stack fs-5 text-muted"/>
+                                    <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded-0 p-2 text-reset ga-h-icons"/>
+                                    <t t-set="_dropdown_menu_class" t-valuef="dropdown-menu-end rounded-0"/>
+                                </t>               
+                            </div>
+                        </div>
+                        <div class="bottom_div d-flex justify-content-between ps-5">
+                            <div class="menus d-flex gap-2">
+                                <!-- Menu -->
+                                <t t-foreach="website.menu_id.child_id" t-as="submenu">
+                                    <t t-call="website.submenu">
+                                        <t t-set="item_class" t-valuef="nav-item h-100 o_border_contrast list-unstyled text-uppercase fw-bold"/>
+                                        <t t-set="link_class" t-valuef="nav-link d-flex align-items-center h-100 py-3"/>
+                                    </t>
+                                </t>
+                            </div>
+                            <!-- Search bar -->
+                            <t t-call="website.placeholder_header_search_box">
+                                <t t-set="_input_classes" t-valuef="me-1"/>
+                                <t t-set="_submit_classes" t-valuef="rounded-0 text-light"/>
+                                <t t-set="_form_classes" t-valuef="h-100 z-index-0"/>
+                                <t t-set="_classes" t-valuef="h-100 o_border_contrast bg-light rounded-0 search_bar"/>
+                                <t t-set="_item_class" t-valuef="list-unstyled border-start w-25"/>
+                            </t>                             
+                        </div>
+                    </div>
+                </t>
+                <t t-call="website.template_header_mobile"/>
+            </xpath>            
+        </template>
+
+        <!-- header 4 -->
+        <template id="template_ga_header_4" inherit_id="website.layout" name="Template Gather Around Header 4" active="False">
+            <xpath expr="//header//nav" position="replace">
+                <t t-call="website.navbar">
+                    <t t-set="_navbar_classes" t-valuef="d-none d-lg-block py-0 shadow-sm p-0 pt-3"/>
+
+                    <div class="d-flex gatheraround_header_4 justify-content-evenly">
+                        <!-- Brand -->
+                        <t t-call="website.placeholder_header_brand">
+                            <t t-set="_link_class" t-valuef="d-flex align-items-center me-4 p-2"/>
+                        </t>
+                        <!-- Menu -->
+                        <div class="menus d-flex gap-2">
+                            <t t-foreach="website.menu_id.child_id" t-as="submenu">
+                                <t t-call="website.submenu">
+                                    <t t-set="item_class" t-valuef="nav-item h-100 o_border_contrast list-unstyled text-uppercase fw-bold"/>
+                                    <t t-set="link_class" t-valuef="nav-link d-flex align-items-center h-100 py-3"/>
+                                </t>
+                            </t>
+                        </div>
+                        <!-- Search bar -->
+                        <t t-call="website.placeholder_header_search_box">
+                            <t t-set="_input_classes" t-valuef="me-1"/>
+                            <t t-set="_submit_classes" t-valuef="rounded-circle"/>
+                            <t t-set="_form_classes" t-valuef="h-100 z-index-0"/>
+                            <t t-set="_classes" t-valuef="h-100 o_border_contrast bg-light rounded-pill search_bar"/>
+                            <t t-set="_item_class" t-valuef="list-unstyled mb-2"/>
+                        </t>
+                        <!-- Icons -->
+                        <div class="icons d-flex position-fixed flex-column gap-3 me-5">
+                            <!-- Wishlist Icon -->
+                            <t t-call="website_sale_wishlist.header_wishlist_link">
+                                <t t-set="_icon" t-value="True"/>
+                                <t t-set="_link_class" t-value="'btn position-relative rounded p-2 text-center text-reset ga-h-icons'"/>
+                                <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+                                <t t-set="_item_class" t-valuef="list-unstyled"/>
+                                <t t-set="_icon_wrap_class" t-valuef="fs-5 text-muted"/>
+                            </t>                                
+                            <!-- Cart Icon -->
+                            <t t-call="website_sale.header_cart_link">
+                                <t t-set="_icon" t-value="True"/>
+                                <t t-set="_link_class" t-value="'btn position-relative rounded p-2 text-center text-reset ga-h-icons'"/>
+                                <t t-set="_badge_class" t-value="'position-absolute top-0 end-0 mt-n1 me-n1 rounded-pill'"/>
+                                <t t-set="_item_class" t-valuef="list-unstyled"/>
+                                <t t-set="_icon_wrap_class" t-valuef="fs-5 text-muted"/>
+                            </t>
+                            <!-- User Dropdown Icon -->
+                            <t t-call="portal.user_dropdown">
+                                <t t-set="_icon" t-value="true"/>
+                                <t t-set="_item_class" t-valuef="dropdown list-unstyled user_slider"/>
+                                <t t-set="_icon_class" t-valuef="fa-stack fs-5 text-muted"/>
+                                <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded p-2 text-reset ga-h-icons"/>
+                                <t t-set="_dropdown_menu_class" t-valuef="d-none"/>
+                            </t>
+                            <!-- Setting Icon -->
+                            <t t-call="theme_gatheraround.header_setting_link">
+                                <t t-set="_icon" t-value="true"/>
+                                <t t-set="_item_class" t-valuef="dropdown list-unstyled setting_slider"/>
+                                <t t-set="_icon_class" t-valuef="fa-stack fs-5 text-muted"/>
+                                <t t-set="_link_class" t-valuef="btn d-flex align-items-center rounded p-2 text-reset ga-h-icons"/>
+                                <t t-set="_dropdown_menu_class" t-valuef="d-none"/>
+                            </t>               
+                        </div>
+                    </div>
+                </t>
+                <t t-call="website.template_header_mobile"/>
+            </xpath>            
+        </template>
+
+    </data>
+</odoo>

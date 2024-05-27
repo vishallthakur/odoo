@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="slider_user_data" name="Slider User Data">
+        <div class="user_card mx-3 p-2 rounded d-flex align-items-center">
+            <t t-if="user_id._is_public()">
+                <i class="fa fa-user tp-bg-soft-primary text-primary rounded-circle me-3 tp-header-icon"></i>
+                <h5 class="mb-0">Guest</h5>
+            </t>
+            <t t-else="">
+                <t t-set="avatar_source" t-value="image_data_uri(user_id.avatar_256)"/>
+                <img t-att-src="avatar_source" t-attf-class="rounded-circle o_object_fit_cover me-2 #{_avatar_class}" width="50" height="50" alt="" loading="eager"/>
+                <div class="user_info text-light">
+                    <h5 class="mt-1 mb-0 text-dark"><t t-out="user_id.name"/></h5>
+                    <span class="text-light"><t t-out="user_id.email"/></span>
+                </div>
+            </t>
+        </div>
+
+        <div t-if="not user_id._is_public()" class="user_card mx-3 p-2 rounded d-flex flex-column align-items-center">
+            <a groups="base.group_user" href="/web" role="menuitem" class="dropdown-item ps-3" id="o_backend_user_dropdown_link">
+                <i class="fa fa-fw fa-th me-1 small text-primary"/> Apps
+            </a>
+            <a href="/my/home" role="menuitem" class="dropdown-item ps-3">
+                <i class="fa fa-fw fa-id-card-o me-1 small text-primary"/> My Account
+            </a>
+            <a href="/my/orders" role="menuitem" class="dropdown-item ps-3">
+                <i class="fa fa-fw fa-first-order me-1 small text-primary"/> My Orders
+            </a>
+            <a href="/my/invoices?filterby=invoices" role="menuitem" class="dropdown-item ps-3">
+                <i class="fa fa-fw fa-file-invoice-dollar me-1 small bg-primary"/> My Invoice
+            </a>                  
+        </div>        
+
+        <div class="user_card mx-3 p-2 rounded d-flex flex-column align-items-center">
+            <t t-if="user_id._is_public()">
+                <a t-attf-href="/web/login" role="menuitem" id="o_logout" class="dropdown-item ps-3">
+                    <i class="fa fa-fw fa-sign-in me-1 small text-primary"/> Login
+                </a>
+                <a t-attf-href="/web/signup" role="menuitem" id="o_logout" class="dropdown-item ps-3">
+                    <i class="fa fa-fw fa-registered me-1 small text-primary"/> Register
+                </a>
+            </t>
+            <t t-else="">
+                <a t-attf-href="/web/session/logout?redirect=/" role="menuitem" id="o_logout" class="dropdown-item ps-3">
+                    <i class="fa fa-fw fa-sign-out me-1 small text-primary"/> Logout
+                </a>            
+            </t>
+        </div>
+    </template>
+
+    <template id="slider_setting_data" name="Slider Setting Data">
+        <t t-set="active_lang" t-value="list(filter(lambda lg : lg[0] == lang, languages))[0]"/>
+        <t t-set="language_selector_visible" t-value="len(languages) &gt; 1 or _selector_visible"/>
+        <t t-set="website_sale_pricelists" t-value="website.get_pricelist_available(show_visible=True)"/>
+        <t t-set="curr_pl" t-value="website._get_current_pricelist()"/>
+
+        <div class="setting_card mx-3 py-2 rounded d-flex flex-column pt-0 border">
+            <h5 class="m-0 rounded-top p-2 text-muted">Select Language</h5>
+            <div id="o_public_divider" class="dropdown-divider mt-0"/>
+            <t t-foreach="languages" t-as="lg">
+                <a t-att-href="url_for(request.httprequest.path + '?' + keep_query(), lang_code=lg[0])" t-attf-class="js_change_lang px-2 #{'active' if active_lang[0] == lg[0] else ''}" t-att-data-url_code="lg[1]">
+                    <span t-if="not no_text" t-esc="lg[2].split('/').pop()"/>
+                </a>
+            </t>
+        </div>
+
+        <div class="setting_card mx-3 py-2 rounded d-flex flex-column pt-0 border">
+            <h5 class="m-0 rounded-top p-2 text-muted">Select Pricelist</h5>
+            <div id="o_public_divider" class="dropdown-divider mt-0"/>
+            <t t-foreach="website_sale_pricelists" t-as="pl">
+                <a t-att-href="'/shop/change_pricelist/%s' % pl.id" t-attf-class="px-2 #{'active' if pl == curr_pl else ''}">
+                    <span class="switcher_pricelist" t-att-data-pl_id="pl.id" t-esc="pl.name"/>
+                </a>
+            </t>            
+        </div>
+        
+    </template>
+
+    <template id="slider_product_card" name="Slider Product Card">
+        <t t-foreach="lines" t-as="line">
+            <div class="row product_card mx-3 py-2 rounded">
+                <div class="col-3 text-center">
+                    <span t-field="line.product_id.image_128" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded o_image_64_max'}" />
+                </div>
+                <div class="col-9">
+                    <div>
+                        <t t-call="website_sale.cart_line_product_link">
+                            <t t-if="content == 'cart'">
+                                <span class="h6" t-esc="line.name_short" />
+                            </t>
+                            <t t-else="">
+                                <span class="h6" t-esc="line.product_id.name" />
+                            </t>
+                        </t>
+                    </div>
+                    <!-- <span class="js_delete_product hidden-xs no-decoration btn btn-secondary circle" title="Remove from cart">
+                        <span class="remove_button">X</span>
+                    </span> -->
+                    <t t-if="content == 'cart'">
+                        <input type="hidden" class="js_quantity form-control quantity" t-att-data-line-id="line.id" t-att-data-product-id="line.product_id.id" t-att-value="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty"/>
+                        <span class="qty">
+                            Qty: <t t-esc="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />
+                        </span>
+                    </t>
+                    <t t-else="">
+                    </t>
+                </div>
+            </div>
+        </t>
+        <div class="product_footer bg-light p-3 w-100 position-absolute fixed-bottom">
+            <a t-attf-href="#{'/shop/cart' if content == 'cart' else '/shop/wishlist'}" type="button" class="btn btn-primary w-100">
+                <span t-if="content == 'cart'">View Cart</span>
+                <span t-else="">View Wishlist</span>
+            </a>
+        </div>
+    </template>
+
+    <template id="slider_body_content" name="Slider Body Content">
+        <t t-if="content == 'cart' or content == 'wishlist'">
+            <t t-call="theme_gatheraround.slider_product_card"/>
+        </t>
+        <t t-elif="content == 'user'">
+            <t t-call="theme_gatheraround.slider_user_data"/>
+        </t>
+        <t t-else="">
+            <t t-call="theme_gatheraround.slider_setting_data"/>
+        </t>
+    </template>
+
+    <template id="slider_cart_content" name="Cart Content Slider">
+        <div class="slider_header d-flex justify-content-between align-items-center border-bottom p-3">
+            <div class="d-flex align-items-center">
+                <i t-attf-class="fa fa-1x fa-fw fa-gear me-3 #{_icon_class}"/>
+                <h5 class="mb-0"><t t-esc="slider_title"/></h5>
+            </div>
+            <button type="button" id="close_slider" t-attf-class="btn-close" />
+        </div>
+        <div class="slider_body d-flex flex-column gap-2 my-2">
+            <t t-call="theme_gatheraround.slider_body_content"></t>
+        </div>
+    </template>
+
+    <template id="slider_popover_modal" inherit_id="portal.frontend_layout" name="Gather Around Slider Popover Modal">
+        <!-- Slider popover view model  -->
+        <xpath expr="//div[@id='wrapwrap']" position="inside">
+            <div id="right_slider_popover">
+                <div class="dynamic_slider_content">
+                </div>
+            </div>
+            <div class="overlay"/>
+        </xpath>
+    </template>
+
+</odoo>
