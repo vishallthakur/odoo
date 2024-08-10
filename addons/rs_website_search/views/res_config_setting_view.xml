@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="res_config_settings_advance_search_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.advance.search.view.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="50"/>
+            <field name="inherit_id" ref="website.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <block id="website_info_settings" position="after">
+                    <block title="Website Advance Search" id="website_advance_search">
+                        <setting id="search_in" string="Search In" help="Which Result you want to show in autocomplete.">
+                            <field name="search_in"/>
+                        </setting>
+                    </block>
+                </block>
+            </field>
+        </record>
+
+    </data>
+</odoo>
