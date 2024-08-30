@@ -31,5 +31,26 @@
             </xpath>
         </template>
 
+        <template id="snippet_options" name="additional e-commerce snippet options" inherit_id="website_sale.snippet_options">
+            <xpath expr="//we-select[hasclass('o_wsale_ppr_submenu')]" position="inside">
+                <we-button data-set-ppr="5">5</we-button>
+                <we-button data-set-ppr="6">6</we-button>                
+            </xpath>
+
+            <xpath expr="//we-button[@data-select-class='o_wsale_design_grid']" position="after">
+                <we-button data-select-class="o_wsale_design_advance_card"
+                           data-customize-website-views="theme_gatheraround.products_design_advance_card">
+                           Advance Card
+                </we-button>               
+            </xpath>
+
+            <xpath expr="//we-checkbox[@data-customize-website-views='website_sale.products_description']" position="after">
+                <we-checkbox string="Prod. Rating"
+                            data-customize-website-views="theme_gatheraround.products_rating"
+                            data-no-preview="true"
+                            data-reload="/"/>
+            </xpath>
+        </template>
+
     </data>
 </odoo>

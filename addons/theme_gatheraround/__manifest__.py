@@ -19,6 +19,7 @@
                                 "views/slider_template.xml",
                                 "views/header_template.xml",
                                 "views/snippets.xml",
+                                "views/template.xml",
                             ],
     "demo"                  : [],
     "images"                : [],
@@ -26,8 +27,10 @@
                                 "web.assets_frontend": [
                                     "theme_gatheraround/static/src/scss/slider_popover.scss",
                                     "theme_gatheraround/static/src/scss/headers.scss",
+                                    "theme_gatheraround/static/src/scss/shop_page.scss",
                                     "theme_gatheraround/static/src/js/main.js",
                                     "theme_gatheraround/static/src/js/headers.js",
+                                    "theme_gatheraround/static/src/js/website_sale.js",
                                 ],
                                 "web._assets_primary_variables": [
                                     "theme_gatheraround/static/src/scss/primary_variables.scss",

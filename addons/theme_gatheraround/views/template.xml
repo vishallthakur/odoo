@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <template id="products_design_advance_card" name="Advance Card Design"
+            inherit_id="website_sale.products" active="False">
+            <xpath expr="//table" position="attributes">
+                <attribute name="class" add="o_wsale_design_advance_card" separator=" " />
+            </xpath>
+        </template>
+
+        <template id="products_rating" inherit_id="website_sale.products_item" active="False"
+            name="Product Rating">
+            <xpath expr="//div[hasclass('o_wsale_product_information_text')]" position="before">
+                <div class="oe_prodrating" contenteditable="false">
+                    <t t-if="is_view_active('website_sale.product_comment')">
+                        <t t-call="portal_rating.rating_widget_stars_static">
+                            <t t-set="rating_avg" t-value="product.rating_avg" />
+                            <t t-set="trans_text_plural">%s reviews</t>
+                            <t t-set="trans_text_singular">%s review</t>
+                            <t t-set="rating_count"
+                                t-value="(trans_text_plural if product.rating_count > 1 else trans_text_singular) % product.rating_count" />
+                        </t>
+                    </t>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="rating_widget_stars_static_add_rating_average" name="Add Rating Average" inherit_id="portal_rating.rating_widget_stars_static">
+            <xpath expr="//t[@t-if='rating_style_compressed']//small" position="attributes">
+                <attribute name="t-att-rating-average">(" &#9733; " + str(rating_avg)) if rating_avg else ""</attribute>
+            </xpath>
+
+            <xpath expr="//t[@t-if='val_decimal']/../small" position="attributes">
+                <attribute name="t-att-rating-average">(" &#9733; " + str(rating_avg)) if rating_avg else ""</attribute>
+            </xpath>
+        </template>
+
+        <template id="out_of_stock_badge" inherit_id="website_sale.products_item"
+            name="Out of Stock Badge">
+            <xpath expr="//div[hasclass('oe_product_image')]" position="inside">
+                <div class="tg-product-stock-label">
+                    <span class="tg-prioduct-stock-label-text">Out of Stock</span>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="products_add_to_cart_full_button"
+            inherit_id="website_sale.products_add_to_cart" name="Add to Cart with Text">
+            <xpath expr="//a[@t-if='product._website_show_quick_add()']" position="attributes">
+                <attribute name="t-if">False</attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('o_wsale_product_sub')]" position="inside">
+                <t t-set="product_variant_id" t-value="product._get_first_possible_variant_id()" />
+                <div class="tg-add-to-cart p-2 w-100">
+                    <input name="product_id" t-att-value="product_variant_id" type="hidden" />
+                    <t
+                        t-if="product_variant_id and template_price_vals['price_reduce'] or not website.prevent_zero_price_sale">
+                        <a t-if="product._website_show_quick_add()"
+                            href="#" role="button" class="btn btn-primary a-submit w-100"
+                            aria-label="Shopping cart" title="Shopping cart">
+                            <span class="fa fa-shopping-cart" />
+                            <span class="tg-add-to-cart-text">Add to Cart</span>
+                        </a>
+                    </t>
+                </div>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>
