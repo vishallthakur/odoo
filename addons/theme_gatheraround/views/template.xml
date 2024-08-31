@@ -37,9 +37,9 @@
         </template>
 
         <template id="out_of_stock_badge" inherit_id="website_sale.products_item"
-            name="Out of Stock Badge">
+            name="Out of Stock Badge" active="False">
             <xpath expr="//div[hasclass('oe_product_image')]" position="inside">
-                <div class="tg-product-stock-label">
+                <div t-if="product.qty_available &lt;= 0 and product.detailed_type == 'product'" class="tg-product-stock-label">
                     <span class="tg-prioduct-stock-label-text">Out of Stock</span>
                 </div>
             </xpath>
@@ -66,6 +66,17 @@
                 </div>
             </xpath>
         </template>
+
+        <template id="products_quick_view" inherit_id="website_sale.products_item" name="Product Quick View">
+            <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="inside">
+                <t t-set="product_variant_id" t-value="product._get_first_possible_variant_id()"/>
+                <input name="product_id" t-att-value="product_variant_id" type="hidden"/>
+                <button type="button" 
+                    role="button" class="btn btn-link btn-outline-primary bg-white tg-product-quick-view" aria-label="Quick view" title="Quick view">
+                    <span class="fa fa-eye"/>
+                </button>
+            </xpath>
+        </template>        
 
     </data>
 </odoo>

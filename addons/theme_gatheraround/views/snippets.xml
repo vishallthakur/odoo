@@ -49,6 +49,18 @@
                             data-customize-website-views="theme_gatheraround.products_rating"
                             data-no-preview="true"
                             data-reload="/"/>
+
+                <we-checkbox string="Prod. Out of Stock Badge"
+                            data-customize-website-views="theme_gatheraround.out_of_stock_badge"
+                            data-no-preview="true"
+                            data-reload="/"/>
+            </xpath>
+
+            <xpath expr="//we-button[hasclass('o_we_add_to_cart_btn')]/.." position="inside">
+                <we-button title="Quick View" class="fa fa-fw fa-eye tg_weproduct_quick_view"
+                            data-customize-website-views="website_sale.products_quick_view"
+                            data-no-preview="true"
+                            data-reload="/"/>
             </xpath>
         </template>
 
