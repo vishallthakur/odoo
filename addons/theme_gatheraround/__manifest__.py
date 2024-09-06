@@ -28,8 +28,10 @@
                                     "theme_gatheraround/static/src/scss/slider_popover.scss",
                                     "theme_gatheraround/static/src/scss/headers.scss",
                                     "theme_gatheraround/static/src/scss/shop_page.scss",
+                                    "theme_gatheraround/static/src/scss/modals.scss",
                                     "theme_gatheraround/static/src/js/main.js",
                                     "theme_gatheraround/static/src/js/headers.js",
+                                    "theme_gatheraround/static/src/js/quick_view_modal.js",
                                     "theme_gatheraround/static/src/js/website_sale.js",
                                 ],
                                 "web._assets_primary_variables": [

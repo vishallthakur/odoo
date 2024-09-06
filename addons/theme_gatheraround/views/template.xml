@@ -69,10 +69,8 @@
 
         <template id="products_quick_view" inherit_id="website_sale.products_item" name="Product Quick View">
             <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="inside">
-                <t t-set="product_variant_id" t-value="product._get_first_possible_variant_id()"/>
-                <input name="product_id" t-att-value="product_variant_id" type="hidden"/>
                 <button type="button" 
-                    role="button" class="btn btn-link btn-outline-primary bg-white tg-product-quick-view" aria-label="Quick view" title="Quick view">
+                    role="button" class="btn btn-link btn-outline-primary bg-white tg-product-quick-view" aria-label="Quick view" title="Quick view" t-att-data-product-template-id="product.id">
                     <span class="fa fa-eye"/>
                 </button>
             </xpath>
